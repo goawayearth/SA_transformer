@@ -318,7 +318,7 @@ class VFTransformer_v3(nn.Module):
             if i == 0:
                 self.decoder.append(Residual_block(self.nch_dec[i], self.nch_dec[i + 1]))
             elif i == len(self.nch_enc) - 1:
-                self.decoder.append(Residual_block(self.nch_dec[i] * 2, 2))
+                self.decoder.append(Residual_block(self.nch_dec[i], 2))
             else:
                 self.decoder.append(Residual_block(self.nch_dec[i] * 2, self.nch_dec[i + 1]))
 
