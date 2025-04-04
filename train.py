@@ -83,7 +83,7 @@ def main(args):
     setup_seed()
 
     device = torch.device(args.device if torch.cuda.is_available() else "cpu")
-    model = VFT([2, 16, 32, 64, 64]).to(device)
+    model = VFT([3, 16, 32, 64, 64]).to(device)
     # segmentation nun_classes + background
     num_classes = args.num_classes
 
