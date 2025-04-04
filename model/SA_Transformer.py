@@ -309,7 +309,8 @@ class VFTransformer_v3(nn.Module):
         self.decoder = nn.ModuleList()
         self.td = nn.ModuleList()
         self.tu = nn.ModuleList()
-        self.conv1 = nn.Conv2d(in_channels=6, out_channels=3, kernel_size=1)
+        self.conv1 = nn.Conv2d(in_channels=4, out_channels=3, kernel_size=1)
+        self.conv2 = nn.Conv2d(in_channels=3, out_channels=2, kernel_size=1)
         for i in range(len(self.nch_enc)):
             self.encoder.append(Multi_Wsize_Layer_v2(num_heads=self.nch_enc[i] // 2,
                                                      hidden_size=self.nch_enc[i],
@@ -328,7 +329,7 @@ class VFTransformer_v3(nn.Module):
 
     def forward(self, x):
         cats = []
-
+        x = self.conv2(x)
         # encoder
         for i in range(len(self.nch_enc) - 1):
             layer_opt = self.encoder[i](x)

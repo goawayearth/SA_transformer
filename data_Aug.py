@@ -130,10 +130,10 @@ if __name__ == '__main__':
               "SA_transformer/DRIVE/training/1st_manual",  # set your path of training labels
               "DRIVE/aug/label")
 
-    """threadOPS("DRIVE/training/images",  # set your path of training images
+    '''threadOPS("DRIVE/training/images",  # set your path of training images
               "DRIVE/aug/images",
               "DRIVE/training/1st_manual",  # set your path of training labels
-              "DRIVE/aug/label")"""
+              "DRIVE/aug/label")'''
 
 
 
