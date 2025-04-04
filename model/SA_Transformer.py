@@ -309,7 +309,7 @@ class VFTransformer_v3(nn.Module):
         self.decoder = nn.ModuleList()
         self.td = nn.ModuleList()
         self.tu = nn.ModuleList()
-
+        self.conv1 = nn.Conv2d(in_channels=6, out_channels=3, kernel_size=1)
         for i in range(len(self.nch_enc)):
             self.encoder.append(Multi_Wsize_Layer_v2(num_heads=self.nch_enc[i] // 2,
                                                      hidden_size=self.nch_enc[i],
@@ -318,7 +318,7 @@ class VFTransformer_v3(nn.Module):
             if i == 0:
                 self.decoder.append(Residual_block(self.nch_dec[i], self.nch_dec[i + 1]))
             elif i == len(self.nch_enc) - 1:
-                self.decoder.append(Residual_block(self.nch_dec[i], 2))
+                self.decoder.append(Residual_block(self.nch_dec[i] * 2, 2))
             else:
                 self.decoder.append(Residual_block(self.nch_dec[i] * 2, self.nch_dec[i + 1]))
 
@@ -344,7 +344,9 @@ class VFTransformer_v3(nn.Module):
             x = self.tu[i](layer_opt)
             x = torch.cat([x, cats[-1 - i]], dim=1)
             layer_opt = self.decoder[i + 1](x)
+            # 假设卷积层的输出通道数仍然是 2
 
-        y_pred = layer_opt
+
+        y_pred = self.conv1(layer_opt)
         return y_pred
 
