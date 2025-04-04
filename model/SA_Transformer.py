@@ -329,7 +329,8 @@ class VFTransformer_v3(nn.Module):
 
     def forward(self, x):
         cats = []
-        x = self.conv2(x)
+        # x = self.conv2(x)
+        x=x[:, :2, :, :]
         # encoder
         for i in range(len(self.nch_enc) - 1):
             layer_opt = self.encoder[i](x)
