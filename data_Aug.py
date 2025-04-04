@@ -18,6 +18,13 @@ class DataAugmentation:
         return Image.open(image)
 
     @staticmethod
+    def resizeImage(image, label, size=(256, 256)):
+        # 调整图像和标签的大小到指定尺寸
+        image = image.resize(size, Image.BICUBIC)
+        label = label.resize(size, Image.NEAREST)
+        return image, label
+
+    @staticmethod
     def randomRotation(image, label, mode=Image.BICUBIC):
         random_angle = np.random.randint(1, 360)
         return image.rotate(random_angle, mode), label.rotate(random_angle, Image.NEAREST)
@@ -71,7 +78,8 @@ class DataAugmentation:
 def imageOps(func_name, image, label, img_des_path, label_des_path, img_file_name, label_file_name, times=3):
     funcMap = {"randomRotation": DataAugmentation.randomRotation,
                "randomColor": DataAugmentation.randomColor,
-               "randomGaussian": DataAugmentation.randomGaussian
+               "randomGaussian": DataAugmentation.randomGaussian,
+               "resizeImage": DataAugmentation.resizeImage  # 添加 resizeImage 操作
                }
     if funcMap.get(func_name) is None:
         logger.error("%s is not exist", func_name)
@@ -83,7 +91,7 @@ def imageOps(func_name, image, label, img_des_path, label_des_path, img_file_nam
         DataAugmentation.saveImage(new_label, os.path.join(label_des_path, func_name + str(_i) + label_file_name))
 
 
-opsList = {"randomRotation", "randomColor", "randomGaussian"}
+opsList = {"randomRotation", "randomColor", "randomGaussian", "resizeImage"}  # 添加 resizeImage 操作
 
 
 def threadOPS(img_path, new_img_path, label_path, new_label_path):
@@ -112,26 +120,29 @@ def threadOPS(img_path, new_img_path, label_path, new_label_path):
         tmp_label_name = os.path.join(label_path, label_name)
 
         image = DataAugmentation.openImage(tmp_img_name)
-
         label = DataAugmentation.openImage(tmp_label_name)
+
+        # 先将图像和标签调整为 256x256
+        image, label = DataAugmentation.resizeImage(image, label)
 
         for ops_name in opsList:
             imageOps(ops_name, image, label, new_img_path, new_label_path, img_name,
                      label_name)
 
 
-# Please modify the path
 if __name__ == '__main__':
+    # DRIVE
+    threadOPS("DRIVE/training/images",  # set your path of training images
+              "DRIVE/aug/images",
+              "DRIVE/training/1st_manual",  # set your path of training labels
+              "DRIVE/aug/label")
+
+'''if __name__ == '__main__':
     # DRIVE
     # 在kaggle执行的话新图像直接建在SA_Unet外面并列，为了不改变其他位置的代码，因为kaggle默认./ 是最外层
     threadOPS("SA_transformer/DRIVE/training/images",  # set your path of training images
               "DRIVE/aug/images",
               "SA_transformer/DRIVE/training/1st_manual",  # set your path of training labels
-              "DRIVE/aug/label")
-
-    '''threadOPS("DRIVE/training/images",  # set your path of training images
-              "DRIVE/aug/images",
-              "DRIVE/training/1st_manual",  # set your path of training labels
               "DRIVE/aug/label")'''
 
 

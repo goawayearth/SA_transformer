@@ -18,11 +18,7 @@ class SegmentationPresetTrain:
     def __init__(self, hflip_prob=0.5, vflip_prob=0.5,
                  mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)):
 
-        trans = [T.RandomResize(size=(256,256))]
-        if hflip_prob > 0:
-            trans.append(T.RandomHorizontalFlip(hflip_prob))
-        if vflip_prob > 0:
-            trans.append(T.RandomVerticalFlip(vflip_prob))
+        trans = []
         trans.extend([
             T.ToTensor(),
             T.Normalize(mean=mean, std=std),
