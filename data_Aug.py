@@ -70,7 +70,6 @@ class DataAugmentation:
 
 def imageOps(func_name, image, label, img_des_path, label_des_path, img_file_name, label_file_name, times=3):
     funcMap = {"randomRotation": DataAugmentation.randomRotation,
-               "randomCrop": DataAugmentation.randomCrop,
                "randomColor": DataAugmentation.randomColor,
                "randomGaussian": DataAugmentation.randomGaussian
                }
