@@ -351,5 +351,6 @@ class VFTransformer_v3(nn.Module):
 
 
         y_pred = self.conv1(layer_opt)
+        y_pred = torch.sigmoid(y_pred)
         return y_pred
 
